@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class QuestionsTest extends StatefulWidget {
-  const QuestionsTest({super.key});
+  //const QuestionsTest({super.key});
+
+  final List<String>? value;
+  const QuestionsTest(this.value);
 
   @override
   State<QuestionsTest> createState() => _QuestionsTestState();
@@ -19,7 +22,16 @@ class _QuestionsTestState extends State<QuestionsTest> {
   Map<String?, String?> opravil = {};
 
   getData() {
-    questions.add({
+    print(widget.value!.length);
+
+    for (var i = 1; i < widget.value!.length; i++) {
+      questions.add({
+        'id': 'ID$i',
+        'question': widget.value![i],
+        'state': 'Ni opravil',
+      });
+    }
+   /* questions.add({
       'id': 'ID1',
       'question': 'Umiti si roke.',
       'state': 'Ni opravil',
@@ -29,8 +41,7 @@ class _QuestionsTestState extends State<QuestionsTest> {
       'id': 'ID2',
       'question': 'Pripraviti delovno površino.',
       'state': 'Je opravil',
-    });
-
+    });*/
   }
 
   @override
@@ -59,7 +70,6 @@ class _QuestionsTestState extends State<QuestionsTest> {
                       color: Colors.black),
                 ),
               ),
-      
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -81,7 +91,9 @@ class _QuestionsTestState extends State<QuestionsTest> {
                                 });
                               },
                             ),
-                            Text(s, style: const TextStyle(color: Colors.black, fontSize: 17))
+                            Text(s,
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 17))
                           ],
                         );
                       }).toList(),

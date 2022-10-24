@@ -32,7 +32,7 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("OSCE LISTI"),
+        title: const Text("OSCE za 1. letnik"),
       ),
       body: const HomePage(),
     );
