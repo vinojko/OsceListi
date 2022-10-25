@@ -3,7 +3,9 @@ import 'package:osce/questions_test.dart';
 
 class Questions extends StatefulWidget {
   final List<String> questions;
-  const Questions({Key? key, required this.questions}) : super(key: key);
+  final String name;
+  final String ocenjevalec;
+  const Questions({Key? key, required this.questions, required this.name, required this.ocenjevalec}) : super(key: key);
 
   @override
   State<Questions> createState() => _QuestionsState();
@@ -18,7 +20,7 @@ class _QuestionsState extends State<Questions> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Ocenjevanje')),
-      body: QuestionsTest(widget.questions),
+      body: QuestionsTest(questions: widget.questions, name: widget.name, ocenjevalec: widget.ocenjevalec),
     );
   }
 }

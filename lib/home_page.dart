@@ -31,6 +31,8 @@ class _HomePageState extends State<HomePage> {
   String kontrolniListChoose = kontrolniListi.first;
   String ocenjevalecChoose = ocenjevalec.first;
 
+  var myController = TextEditingController();
+
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -123,11 +125,12 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 10),
-            const SizedBox(
+             SizedBox(
               width: 500.0,
               height: 45.0,
               child: TextField(
-                decoration: InputDecoration(border: OutlineInputBorder()),
+                controller: myController,
+                decoration: const InputDecoration(border: OutlineInputBorder()),
               ),
             ),
             const SizedBox(height: 20),
@@ -138,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                   _read(letnikChoose, kontrolniListChoose, ocenjevalecChoose);
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Questions(
-                            questions: questions,
+                            questions: questions, name: myController.text, ocenjevalec: ocenjevalecChoose
                           )));
                 },
                 child: const Text(

@@ -4,8 +4,15 @@ import 'package:osce/results.dart';
 class QuestionsTest extends StatefulWidget {
   //const QuestionsTest({super.key});
 
-  final List<String>? value;
-  const QuestionsTest(this.value);
+  final List<String>? questions;
+  final String name;
+  final String ocenjevalec;
+  const QuestionsTest(
+      {Key? key,
+      required this.questions,
+      required this.name,
+      required this.ocenjevalec})
+      : super(key: key);
 
   @override
   State<QuestionsTest> createState() => _QuestionsTestState();
@@ -19,16 +26,16 @@ class _QuestionsTestState extends State<QuestionsTest> {
 
   List<String> labels = ['Je opravil', 'Ni opravil'];
 
-  List<Map> questions = [];
+  List<Map> results = [];
   Map<String?, String?> opravil = {};
 
   getData() {
     //print(widget.value!.length);
 
-    for (var i = 1; i < widget.value!.length; i++) {
-      questions.add({
+    for (var i = 1; i < widget.questions!.length; i++) {
+      results.add({
         'id': 'ID$i',
-        'question': widget.value![i],
+        'question': widget.questions![i],
         'state': 'Ni opravil',
       });
     }
@@ -55,7 +62,7 @@ class _QuestionsTestState extends State<QuestionsTest> {
     return Column(children: [
       Expanded(
         child: ListView.builder(
-          itemCount: questions.length,
+          itemCount: results.length,
           itemBuilder: (BuildContext context, index) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -66,7 +73,7 @@ class _QuestionsTestState extends State<QuestionsTest> {
                   title: Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      questions[index]['question'],
+                      results[index]['question'],
                       style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -85,12 +92,12 @@ class _QuestionsTestState extends State<QuestionsTest> {
                             return Column(
                               children: <Widget>[
                                 Radio(
-                                  groupValue: questions[index]['state'],
+                                  groupValue: results[index]['state'],
                                   value: s,
                                   onChanged: (newValue) {
                                     setState(() {
                                       print(newValue);
-                                      questions[index]['state'] = newValue;
+                                      results[index]['state'] = newValue;
                                     });
                                   },
                                 ),
@@ -116,7 +123,7 @@ class _QuestionsTestState extends State<QuestionsTest> {
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 10)),
           onPressed: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => Results()));
+                .push(MaterialPageRoute(builder: (context) => Results(results: results, name: widget.name, ocenjevalec: widget.ocenjevalec)));
           },
           child: const Text(
             "Končaj z ocenjevanjem",
