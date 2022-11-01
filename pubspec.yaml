@@ -31,7 +31,10 @@ environment:
 dependencies:
   path_provider: ^2.0.11
   permission_handler: ^10.2.0 
-  excel: any
+  excel:
+    git:
+      url: "https://github.com/justkawal/excel.git"
+      ref: "null-safety"
   flutter:
     sdk: flutter
 

@@ -173,6 +173,7 @@ class _HomePageState extends State<HomePage> {
 }*/
 
 Future<String> _read(
+
     String letnik, String kontrolniList, String ocenjevalec) async {
   String text = "";
   try {
@@ -183,7 +184,7 @@ Future<String> _read(
     questions.clear();
 
     for (var row in excel.tables[kontrolniList]!.rows) {
-      questions.add(row[0]);
+      questions.add(row[0]!.value);
     }
 
     print(questions.length);

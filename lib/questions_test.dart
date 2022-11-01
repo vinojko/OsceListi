@@ -122,8 +122,12 @@ class _QuestionsTestState extends State<QuestionsTest> {
           style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 10)),
           onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => Results(results: results, name: widget.name, ocenjevalec: widget.ocenjevalec)));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Results(
+                    title: widget.questions![0],
+                    results: results,
+                    name: widget.name,
+                    ocenjevalec: widget.ocenjevalec)));
           },
           child: const Text(
             "Končaj z ocenjevanjem",
