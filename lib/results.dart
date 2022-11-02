@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:excel/excel.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Results extends StatefulWidget {
   final List<Map>? results;
@@ -23,6 +24,8 @@ class Results extends StatefulWidget {
 
 class _ResultsState extends State<Results> {
   var correctAnswers = 0;
+
+  String? fileLocation;
   getData() {
     //print(widget.results!.length);
 
@@ -34,6 +37,7 @@ class _ResultsState extends State<Results> {
           .length;
     }
     print(correctAnswers);
+    createDir(widget.name!);
   }
 
   Future<String> createDir(String fileName) async {
@@ -127,9 +131,10 @@ class _ResultsState extends State<Results> {
               cell.value = widget.results![i]["question"];
 
               cellStyle = CellStyle(
-                  bold: true,
-                  horizontalAlign: HorizontalAlign.Center,
-                  backgroundColorHex: "#C6EFCE");
+                bold: true,
+                horizontalAlign: HorizontalAlign.Center,
+                backgroundColorHex: "#C6EFCE",
+              );
               cell = sheetObject.cell(
                   CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i + 4));
               cell.cellStyle = cellStyle;
@@ -146,10 +151,10 @@ class _ResultsState extends State<Results> {
               cell.value = widget.results![i]["question"];
 
               cellStyle = CellStyle(
-                  bold: true,
-                  horizontalAlign: HorizontalAlign.Center,
-                  backgroundColorHex: "#FFC7CE",
-                  );
+                bold: true,
+                horizontalAlign: HorizontalAlign.Center,
+                backgroundColorHex: "#FFC7CE",
+              );
               cell = sheetObject.cell(
                   CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: i + 4));
               cell.cellStyle = cellStyle;
@@ -171,6 +176,9 @@ class _ResultsState extends State<Results> {
             ..createSync(recursive: true)
             ..writeAsBytesSync(fileBytes!);
 
+          fileLocation =
+              '$fileName/$fileName - ${now.year}-${now.day}-${now.month} ${now.hour}-${now.minute}.xlsx';
+
           return '${dir.path}/$fileName';
         } else {
           return "iOS detected";
@@ -180,6 +188,27 @@ class _ResultsState extends State<Results> {
       print(e);
     }
     return "false";
+  }
+
+  Future<bool> shareFile() async {
+    Directory? dir;
+    try {
+      if (Platform.isAndroid) {
+        if (await _requestPermission(Permission.storage)) {
+          dir = await getExternalStorageDirectory();
+
+          Share.shareXFiles([XFile('${dir!.path}/$fileLocation')],
+              text: 'Rezultati');
+
+          return true;
+        } else {
+          return false;
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
   }
 
   @override
@@ -224,15 +253,12 @@ class _ResultsState extends State<Results> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    onPressed: () {
-                      //createExcel(widget.name);
-                      createDir(widget.name!);
-                    },
-                    child: const Text("Shrani rezultate")),
                 const SizedBox(width: 25),
                 ElevatedButton(
-                    onPressed: () {}, child: const Text("Posreduj rezultate"))
+                    onPressed: () {
+                      shareFile();
+                    },
+                    child: const Text("Posreduj rezultate"))
               ],
             ),
             const SizedBox(height: 50),
@@ -323,8 +349,3 @@ Future get _localFile async {
 
   return File('$path/file-name.txt');
 }
-
-void createExcel() {}
-void insertExcel() {}
-
-void saveExcel() {}

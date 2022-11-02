@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 const List<String> letniki = <String>['1. letnik', '2. letnik', '3. letnik'];
 List<String> kontrolniListi = ['Aspiracija'];
-const List<String> ocenjevalec = <String>['Študent', 'Profesor'];
+const List<String> ocenjevalec = <String>['Študent', 'Visokošolski učitelj'];
 List<String> questions = [];
 
 class HomePage extends StatefulWidget {
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 30),
             const Text(
-              "Vnesi ime in priimek",
+              "Vnesi ime in priimek študenta",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
