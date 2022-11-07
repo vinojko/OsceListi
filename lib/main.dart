@@ -1,8 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:osce/home_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
+  //downloadFile();
 }
 
 class MyApp extends StatelessWidget {
@@ -12,9 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch:  Colors.teal
-        ),
+      theme: ThemeData(primarySwatch: Colors.teal),
       home: const RootPage(),
     );
   }
@@ -35,6 +42,13 @@ class _RootPageState extends State<RootPage> {
         title: const Text("OSCE za 1. letnik"),
       ),
       body: const HomePage(),
+      
     );
+    
+
+    
   }
+  
 }
+
+
