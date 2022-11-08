@@ -5,18 +5,11 @@ import 'package:osce/questions_test.dart';
 import 'package:path/path.dart';
 import 'package:excel/excel.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 const List<String> letniki = <String>['1. letnik', '2. letnik', '3. letnik'];
 List<String> kontrolniListi = ['Aspiracija'];
 const List<String> ocenjevalec = <String>['Študent', 'Visokošolski učitelj'];
 List<String> questions = [];
-
-bool succes = false;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,14 +22,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    downloadFile();
-
     updateControlList().whenComplete(() => setState(() {
           // Update your UI with the desired changes.
         }));
   }
-
-  void showStatus(BuildContext context) {}
 
   String letnikChoose = letniki.first;
   String kontrolniListChoose = kontrolniListi.first;
@@ -46,7 +35,6 @@ class _HomePageState extends State<HomePage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       body: Align(
         alignment: Alignment.topLeft,
@@ -137,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 10),
-            SizedBox(
+             SizedBox(
               width: 500.0,
               height: 45.0,
               child: TextField(
@@ -153,9 +141,8 @@ class _HomePageState extends State<HomePage> {
                   _read(letnikChoose, kontrolniListChoose, ocenjevalecChoose);
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Questions(
-                          questions: questions,
-                          name: myController.text,
-                          ocenjevalec: ocenjevalecChoose)));
+                            questions: questions, name: myController.text, ocenjevalec: ocenjevalecChoose
+                          )));
                 },
                 child: const Text(
                   "Začni z ocenjevanjem",
@@ -186,6 +173,7 @@ class _HomePageState extends State<HomePage> {
 }*/
 
 Future<String> _read(
+
     String letnik, String kontrolniList, String ocenjevalec) async {
   String text = "";
   try {
@@ -233,43 +221,4 @@ Future<String> updateControlList() async {
     print(e);
   }
   return text;
-}
-
-Future<void> downloadFile() async {
-  final storageRef = FirebaseStorage.instance.ref();
-
-  final pathReference = storageRef.child("OSCE/2letnik.xlsx");
-
-  final Directory dir = await getApplicationDocumentsDirectory();
-  final filePath = "${dir.path}/2letnik.xlsx";
-  final file = File(filePath);
-  print(dir.path);
-
-  final downloadTask = pathReference.writeToFile(file);
-  downloadTask.snapshotEvents.listen((taskSnapshot) {
-    switch (taskSnapshot.state) {
-      case TaskState.running:
-        // TODO: Handle this case.
-        break;
-      case TaskState.paused:
-        // TODO: Handle this case.
-        break;
-      case TaskState.success:
-        print("succes");
-        Fluttertoast.showToast(
-            msg: "Povezava z bazo je uspešno vzpostavljena. Datoteke so posodobljene.",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,);
-        break;
-      case TaskState.canceled:
-        // TODO: Handle this case.
-        break;
-      case TaskState.error:
-               Fluttertoast.showToast(
-            msg: "Povezava z bazo ni uspela. Preverite internetno povezavo.",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,);
-        break;
-    }
-  });
 }

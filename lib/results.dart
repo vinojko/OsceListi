@@ -253,9 +253,8 @@ class _ResultsState extends State<Results> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
+                const SizedBox(width: 25),
                 ElevatedButton(
-                  
                     onPressed: () {
                       shareFile();
                     },
@@ -277,7 +276,7 @@ class _ResultsState extends State<Results> {
                   itemBuilder: (BuildContext context, index) {
                     return Padding(
                       padding:
-                          const EdgeInsets.only(left: 0, top: 5, right: 0),
+                          const EdgeInsets.only(left: 400, top: 5, right: 400),
                       child: Card(
                         color:
                             (widget.results![index].containsValue("Je opravil")
@@ -345,4 +344,8 @@ Future get _localDir async {
   return false;
 }
 
+Future get _localFile async {
+  final path = await _localPath;
 
+  return File('$path/file-name.txt');
+}

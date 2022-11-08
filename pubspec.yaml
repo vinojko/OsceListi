@@ -32,17 +32,12 @@ dependencies:
   path_provider: ^2.0.11
   permission_handler: ^10.2.0
   share_plus: ^6.2.0
-  cloud_firestore: ^4.0.3
-  firebase_storage: ^11.0.3
-  flutter_launcher_icons: ^0.10.0
-  fluttertoast: ^8.1.1
   excel:
     git:
       url: "https://github.com/justkawal/excel.git"
       ref: "null-safety"
   flutter:
     sdk: flutter
-  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -50,19 +45,8 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
-
   flutter_test:
     sdk: flutter
-
-  flutter_launcher_icons: "^0.10.0"
-
-
-flutter_icons:
-  image_path: "assets/images/logo.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
-  android: true
-  ios: true
-
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
