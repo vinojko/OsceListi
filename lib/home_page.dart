@@ -29,9 +29,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    downloadFile();
+    downloadFirst();
+    downloadSecond();
+    downloadThird();
 
-    updateControlList().whenComplete(() => setState(() {
+    updateControlList("1. letnik").whenComplete(() => setState(() {
           // Update your UI with the desired changes.
         }));
   }
@@ -56,7 +58,7 @@ class _HomePageState extends State<HomePage> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
                   Widget>[
-            /*const Text(
+            const Text(
               "Izberi letnik",
               style: TextStyle(
                   color: Colors.black,
@@ -69,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               onChanged: (String? value) {
                 setState(() {
                   letnikChoose = value!;
-                  updateControlList();
+                  updateControlList(letnikChoose);
                 });
               },
               items: letniki.map<DropdownMenuItem<String>>((String value) {
@@ -79,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                 );
               }).toList(),
             ),
-            const SizedBox(height: 50),*/
+            const SizedBox(height: 30),
             const Text(
               "Izberi kontrolni list",
               style: TextStyle(
@@ -190,7 +192,7 @@ Future<String> _read(
   String text = "";
   try {
     final Directory directory = await getApplicationDocumentsDirectory();
-    var bytes = File('${directory.path}/2letnik.xlsx').readAsBytesSync();
+    var bytes = File('${directory.path}/${letnik}.xlsx').readAsBytesSync();
     var excel = Excel.decodeBytes(bytes);
 
     questions.clear();
@@ -212,11 +214,12 @@ Future<String> _read(
   return text;
 }
 
-Future<String> updateControlList() async {
+Future<String> updateControlList(String letnikChoose) async {
   String text = "";
   try {
     final Directory directory = await getApplicationDocumentsDirectory();
-    var bytes = File('${directory.path}/2letnik.xlsx').readAsBytesSync();
+    var bytes =
+        File('${directory.path}/${letnikChoose}.xlsx').readAsBytesSync();
     var excel = Excel.decodeBytes(bytes);
 
     kontrolniListi.clear();
@@ -235,15 +238,14 @@ Future<String> updateControlList() async {
   return text;
 }
 
-Future<void> downloadFile() async {
+Future<void> downloadFirst() async {
   final storageRef = FirebaseStorage.instance.ref();
 
-  final pathReference = storageRef.child("OSCE/2letnik.xlsx");
+  final pathReference = storageRef.child("OSCE/1. letnik.xlsx");
 
   final Directory dir = await getApplicationDocumentsDirectory();
-  final filePath = "${dir.path}/2letnik.xlsx";
+  final filePath = "${dir.path}/1. letnik.xlsx";
   final file = File(filePath);
-  print(dir.path);
 
   final downloadTask = pathReference.writeToFile(file);
   downloadTask.snapshotEvents.listen((taskSnapshot) {
@@ -257,18 +259,100 @@ Future<void> downloadFile() async {
       case TaskState.success:
         print("succes");
         Fluttertoast.showToast(
-            msg: "Povezava z bazo je uspešno vzpostavljena. Datoteke so posodobljene.",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,);
+          msg: "1. letnik uspešno posodobljen.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
         break;
       case TaskState.canceled:
         // TODO: Handle this case.
         break;
       case TaskState.error:
-               Fluttertoast.showToast(
-            msg: "Povezava z bazo ni uspela. Preverite internetno povezavo.",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,);
+        Fluttertoast.showToast(
+          msg: "Povezava z bazo ni uspela. Preverite internetno povezavo.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
+        break;
+    }
+  });
+}
+
+Future<void> downloadSecond() async {
+  final storageRef = FirebaseStorage.instance.ref();
+
+  final pathReference = storageRef.child("OSCE/2. letnik.xlsx");
+
+  final Directory dir = await getApplicationDocumentsDirectory();
+  final filePath = "${dir.path}/2. letnik.xlsx";
+  final file = File(filePath);
+
+  final downloadTask = pathReference.writeToFile(file);
+  downloadTask.snapshotEvents.listen((taskSnapshot) {
+    switch (taskSnapshot.state) {
+      case TaskState.running:
+        // TODO: Handle this case.
+        break;
+      case TaskState.paused:
+        // TODO: Handle this case.
+        break;
+      case TaskState.success:
+        print("succes");
+        Fluttertoast.showToast(
+          msg: "2. letnik uspešno posodobljen.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
+        break;
+      case TaskState.canceled:
+        // TODO: Handle this case.
+        break;
+      case TaskState.error:
+        Fluttertoast.showToast(
+          msg: "Povezava z bazo ni uspela. Preverite internetno povezavo.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
+        break;
+    }
+  });
+}
+
+Future<void> downloadThird() async {
+  final storageRef = FirebaseStorage.instance.ref();
+
+  final pathReference = storageRef.child("OSCE/3. letnik.xlsx");
+
+  final Directory dir = await getApplicationDocumentsDirectory();
+  final filePath = "${dir.path}/3. letnik.xlsx";
+  final file = File(filePath);
+
+  final downloadTask = pathReference.writeToFile(file);
+  downloadTask.snapshotEvents.listen((taskSnapshot) {
+    switch (taskSnapshot.state) {
+      case TaskState.running:
+        // TODO: Handle this case.
+        break;
+      case TaskState.paused:
+        // TODO: Handle this case.
+        break;
+      case TaskState.success:
+        print("succes");
+        Fluttertoast.showToast(
+          msg: "3. letnik uspešno posodobljen.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
+        break;
+      case TaskState.canceled:
+        // TODO: Handle this case.
+        break;
+      case TaskState.error:
+        Fluttertoast.showToast(
+          msg: "Povezava z bazo ni uspela. Preverite internetno povezavo.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
         break;
     }
   });

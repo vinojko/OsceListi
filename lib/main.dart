@@ -14,6 +14,20 @@ Future main() async {
   //downloadFile();
 }
 
+Map<int, Color> color = {
+  50: Color.fromRGBO(0, 106, 142, .1),
+  100: Color.fromRGBO(0, 106, 142, .2),
+  200: Color.fromRGBO(0, 106, 142, .3),
+  300: Color.fromRGBO(0, 106, 142, .4),
+  400: Color.fromRGBO(0, 106, 142, .5),
+  500: Color.fromRGBO(0, 106, 142, .6),
+  600: Color.fromRGBO(0, 106, 142, .7),
+  700: Color.fromRGBO(0, 106, 142, .8),
+  800: Color.fromRGBO(0, 106, 142, .9),
+  900: Color.fromRGBO(0, 106, 142, 1),
+};
+MaterialColor myColor = MaterialColor(0xFF006A8E, color);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -21,7 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.teal),
+      theme: ThemeData(primarySwatch: myColor),
       home: const RootPage(),
     );
   }
@@ -39,16 +53,10 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("OSCE za 1. letnik"),
+        title: const Text(
+            "Postopki ZN in diagnostično terapevtski posegi pri odraslem pacientu"),
       ),
       body: const HomePage(),
-      
     );
-    
-
-    
   }
-  
 }
-
-
