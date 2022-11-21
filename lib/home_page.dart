@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:spreadsheet_decoder/spreadsheet_decoder.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -15,6 +16,7 @@ const List<String> letniki = <String>['1. letnik', '2. letnik', '3. letnik'];
 List<String> kontrolniListi = ['Aspiracija'];
 const List<String> ocenjevalec = <String>['Študent', 'Visokošolski učitelj'];
 List<String> questions = [];
+String kontrolniListChoose = kontrolniListi.first;
 
 bool succes = false;
 
@@ -41,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   void showStatus(BuildContext context) {}
 
   String letnikChoose = letniki.first;
-  String kontrolniListChoose = kontrolniListi.first;
+
   String ocenjevalecChoose = ocenjevalec.first;
 
   var myController = TextEditingController();
@@ -69,10 +71,10 @@ class _HomePageState extends State<HomePage> {
               hint: const Text("Izberi letnik..."),
               value: letnikChoose,
               onChanged: (String? value) {
-                setState(() {
-                  letnikChoose = value!;
-                  updateControlList(letnikChoose);
-                });
+                letnikChoose = value!;
+                updateControlList(letnikChoose).whenComplete(() => setState(() {
+                      // Update your UI with the desired changes.
+                    }));
               },
               items: letniki.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
@@ -195,10 +197,14 @@ Future<String> _read(
     var bytes = File('${directory.path}/${letnik}.xlsx').readAsBytesSync();
     var excel = Excel.decodeBytes(bytes);
 
+    var decoder = SpreadsheetDecoder.decodeBytes(bytes);
+    var table = decoder.tables[kontrolniList];
+    var values = table!.rows[0];
+
     questions.clear();
 
-    for (var row in excel.tables[kontrolniList]!.rows) {
-      questions.add(row[0]!.value);
+    for (var row in decoder.tables[kontrolniList]!.rows) {
+      questions.add(row[0]);
     }
 
     print(questions.length);
@@ -206,6 +212,7 @@ Future<String> _read(
     //print(table); //sheet Name
     //print(excel.tables[table].maxCols);
     //print(excel.tables[table]!.maxRows);
+
 
   } catch (e) {
     print("Napaka pri branju datoteke:");
@@ -231,6 +238,8 @@ Future<String> updateControlList(String letnikChoose) async {
       //print(excel.tables[table].maxCols);
 
     }
+    kontrolniListChoose = kontrolniListi[0];
+    print(kontrolniListi);
   } catch (e) {
     print("Napaka pri branju datoteke:");
     print(e);

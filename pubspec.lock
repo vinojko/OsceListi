@@ -429,6 +429,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.0"
+  spreadsheet_decoder:
+    dependency: "direct main"
+    description:
+      name: spreadsheet_decoder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
   stack_trace:
     dependency: transitive
     description:
