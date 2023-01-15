@@ -164,7 +164,22 @@ class _HomePageState extends State<HomePage> {
                 child: const Text(
                   "Začni z ocenjevanjem",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ))
+                )),
+                Expanded(
+                  child: Row(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.start,
+                  children: [ 
+                  Image.asset('assets/images/evropskiSklad.png',
+                  scale: 2),
+                  SizedBox(width: 30,),
+                  Image.asset('assets/images/ministrstvo.png',
+                  scale: 4),
+                  SizedBox(width: 30,),
+                  Image.asset('assets/images/fzv.png',
+                  scale: 2.7)
+                  ],),
+                )
+            
+             
           ]),
         ),
       ),
