@@ -10,12 +10,16 @@ class Results extends StatefulWidget {
   final String title;
   final String? name;
   final String ocenjevalec;
+  final String minutes;
+  final String seconds;
   const Results(
       {Key? key,
       required this.results,
       required this.title,
       required this.name,
-      required this.ocenjevalec})
+      required this.ocenjevalec,
+      required this.minutes,
+      required this.seconds})
       : super(key: key);
 
   @override
@@ -246,16 +250,30 @@ class _ResultsState extends State<Results> {
               "$correctAnswers / ${widget.results!.length}",
               style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 50,
+                  fontSize: 35,
+                  fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 15),
+            const Text(
+              "Končni čas:",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '${widget.minutes}:${widget.seconds}',
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 35,
                   fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 ElevatedButton(
-                  
                     onPressed: () {
                       shareFile();
                     },
@@ -276,8 +294,7 @@ class _ResultsState extends State<Results> {
                   itemCount: widget.results!.length,
                   itemBuilder: (BuildContext context, index) {
                     return Padding(
-                      padding:
-                          const EdgeInsets.only(left: 0, top: 5, right: 0),
+                      padding: const EdgeInsets.only(left: 0, top: 5, right: 0),
                       child: Card(
                         color:
                             (widget.results![index].containsValue("Je opravil")
@@ -344,5 +361,3 @@ Future get _localDir async {
   }
   return false;
 }
-
-

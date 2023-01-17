@@ -8,11 +8,15 @@ class QuestionsTest extends StatefulWidget {
   final List<String>? questions;
   final String name;
   final String ocenjevalec;
+  final String minutes;
+  final String seconds;
   const QuestionsTest(
       {Key? key,
       required this.questions,
       required this.name,
-      required this.ocenjevalec})
+      required this.ocenjevalec,
+      required this.minutes,
+      required this.seconds})
       : super(key: key);
 
   @override
@@ -150,10 +154,13 @@ class _QuestionsTestState extends State<QuestionsTest> {
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Results(
-                          title: widget.questions![0],
-                          results: results,
-                          name: widget.name,
-                          ocenjevalec: widget.ocenjevalec)));
+                            title: widget.questions![0],
+                            results: results,
+                            name: widget.name,
+                            ocenjevalec: widget.ocenjevalec,
+                            minutes: widget.minutes,
+                            seconds: widget.seconds,
+                          )));
                 },
                 child: const Text(
                   "Končaj z ocenjevanjem",

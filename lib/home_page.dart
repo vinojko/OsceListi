@@ -154,32 +154,44 @@ class _HomePageState extends State<HomePage> {
                 style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 10)),
                 onPressed: () {
-                  _read(letnikChoose, kontrolniListChoose, ocenjevalecChoose);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Questions(
-                          questions: questions,
-                          name: myController.text,
-                          ocenjevalec: ocenjevalecChoose)));
+                  if ((myController.text).isEmpty) {
+                    Fluttertoast.showToast(
+                      msg: "Niste vnesli imena in priimka!",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                    );
+                  } else {
+                    _read(letnikChoose, kontrolniListChoose, ocenjevalecChoose);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Questions(
+                            questions: questions,
+                            name: myController.text,
+                            ocenjevalec: ocenjevalecChoose)));
+                  }
                 },
                 child: const Text(
                   "Začni z ocenjevanjem",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 )),
-                Expanded(
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.start,
-                  children: [ 
-                  Image.asset('assets/images/evropskiSklad.png',
-                  scale: 2),
-                  SizedBox(width: 30,),
-                  Image.asset('assets/images/ministrstvo.png',
-                  scale: 4),
-                  SizedBox(width: 30,),
-                  Image.asset('assets/images/fzv.png',
-                  scale: 2.7)
-                  ],),
-                )
-            
-             
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset('assets/images/logotipi.png', scale: 2.3),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 15.0),
+              child: Text(
+                'Projekt sofinancirata Republika Slovenija, Ministrstvo za izobraževanje, znanost in šport, in Evropska unija – NextGenerationEU. Projekt se izvaja skladno z načrtom v okviru razvojnega področja Pametna, trajnostna in vključujoča rast, komponente Krepitev kompetenc, zlasti digitalnih in tistih, ki jih zahtevajo novi poklici in zeleni prehod (C3 K5), za ukrep investicija F. Izvajanje pilotnih projektov, katerih rezultati bodo podlaga za pripravo izhodišč za reformo visokega šolstva za zelen in odporen prehod v Družbo 5.0: projekt Pilotni projekti za prenovo visokega šolstva za zelen in odporen prehod.',
+                style: TextStyle(
+                    color: Color.fromARGB(255, 112, 112, 112),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500),
+              ),
+            )
           ]),
         ),
       ),
@@ -227,7 +239,6 @@ Future<String> _read(
     //print(table); //sheet Name
     //print(excel.tables[table].maxCols);
     //print(excel.tables[table]!.maxRows);
-
 
   } catch (e) {
     print("Napaka pri branju datoteke:");
