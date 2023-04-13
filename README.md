@@ -1,5 +1,5 @@
 # Flutter OSCE Assessment App
-I developed a Flutter app that enables students and professors to assess students based on OSCE (Objective Structured Clinical Examination) methodology. The app allows students to perform mock assessments and receive feedback from professors.
+I created a Flutter app designed to simplify the process of OSCE  (Objective Structured Clinical Examination) assessments for both students and professors in the Faculty of Health Sciences. The app allows students to perform mock assessments and receive feedback from professors.
 
 All OSCE assessments are updated from the Firebase storage, ensuring that the app has the most up-to-date version of the assessments. The results of the assessments are stored on the device and can be exported and sent via email.
 
