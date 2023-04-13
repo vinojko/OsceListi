@@ -3,7 +3,7 @@ I created a Flutter app designed to simplify the process of OSCE  (Objective Str
 
 All OSCE assessments are updated from the Firebase storage, ensuring that the app has the most up-to-date version of the assessments. The results of the assessments are stored on the device and can be exported and sent via email.
 
-The app provides a user-friendly interface that allows students to easily navigate through the assessments and professors to quickly grade the assessments. Overall, the app streamlines the assessment process and provides valuable feedback for students.
+The app provides a user-friendly interface that allows students to easily navigate through the assessments and professors to quickly grade.
 
 Technologies used: Flutter, Firebase.
 
