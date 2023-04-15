@@ -239,7 +239,6 @@ Future<String> _read(
     //print(table); //sheet Name
     //print(excel.tables[table].maxCols);
     //print(excel.tables[table]!.maxRows);
-
   } catch (e) {
     print("Napaka pri branju datoteke:");
     print(e);
@@ -262,7 +261,6 @@ Future<String> updateControlList(String letnikChoose) async {
 
       //print(table); //sheet Name
       //print(excel.tables[table].maxCols);
-
     }
     kontrolniListChoose = kontrolniListi[0];
     print(kontrolniListi);

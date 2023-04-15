@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:excel/excel.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:mime/mime.dart';
 
 class Results extends StatefulWidget {
   final List<Map>? results;
@@ -51,142 +52,16 @@ class _ResultsState extends State<Results> {
         if (await _requestPermission(Permission.storage)) {
           dir = await getExternalStorageDirectory();
           print(dir!.path);
-
-          var newDir =
-              await Directory('${dir.path}/$fileName').create(recursive: true);
-
-          final now = DateTime.now();
-
-          var excel = Excel.createExcel();
-          Sheet sheetObject = excel['Sheet1'];
-          final sheet = excel.sheets[excel.getDefaultSheet() as String];
-          sheet!.setColWidth(0, 70);
-          /* --- STATIC FIELDS --- */
-
-          //IME IN PRIIMEK
-          var cellStatic = sheetObject
-              .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0));
-          CellStyle? cellStyle =
-              CellStyle(bold: true, horizontalAlign: HorizontalAlign.Right);
-          cellStatic.cellStyle = cellStyle;
-          cellStatic.value = "Ime in priimek:";
-          //OCENJEVALEC
-          cellStatic = sheetObject
-              .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 1));
-          cellStatic.cellStyle = cellStyle;
-          cellStatic.value = "Ocenjevalec:";
-          //DATUM
-          cellStatic = sheetObject
-              .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 2));
-          cellStatic.cellStyle = cellStyle;
-          cellStatic.value = "Datum:";
-          // NASLOV
-          cellStatic = sheetObject
-              .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 3));
-          cellStyle =
-              CellStyle(bold: true, horizontalAlign: HorizontalAlign.Center);
-          cellStatic.cellStyle = cellStyle;
-          cellStatic.value = widget.title;
-
-          // JE OPRAVIL
-          cellStatic = sheetObject
-              .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 3));
-          cellStyle =
-              CellStyle(bold: true, horizontalAlign: HorizontalAlign.Center);
-          cellStatic.cellStyle = cellStyle;
-          cellStatic.value = "Je opravil";
-          // NI OPRAVIL
-          cellStatic = sheetObject
-              .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: 3));
-          cellStyle =
-              CellStyle(bold: true, horizontalAlign: HorizontalAlign.Center);
-          cellStatic.cellStyle = cellStyle;
-          cellStatic.value = "Ni opravil";
-
-          /* --- DYNAMIC FIELDS --- */
-
-          //IME IN PRIIMEK
-          cellStatic = sheetObject
-              .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 0));
-          cellStyle =
-              CellStyle(bold: false, horizontalAlign: HorizontalAlign.Left);
-          cellStatic.cellStyle = cellStyle;
-          cellStatic.value = widget.name;
-          //OCENJEVALEC
-          cellStatic = sheetObject
-              .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 1));
-          cellStatic.cellStyle = cellStyle;
-          cellStatic.value = widget.ocenjevalec;
-          //DATUM
-          cellStatic = sheetObject
-              .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 2));
-          cellStatic.cellStyle = cellStyle;
-          cellStatic.value = '${now.day}/${now.month}/${now.year}';
-
-          for (var i = 0; i < widget.results!.length; i++) {
-            CellStyle? cellStyle;
-            var cell = sheetObject.cell(
-                CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: i + 4));
-            print(widget.results![i]["state"]);
-
-            if (widget.results![i]["state"] == "Je opravil") {
-              cellStyle = CellStyle(backgroundColorHex: "#C6EFCE");
-              cell.cellStyle = cellStyle;
-              cell.value = widget.results![i]["question"];
-
-              cellStyle = CellStyle(
-                bold: true,
-                horizontalAlign: HorizontalAlign.Center,
-                backgroundColorHex: "#C6EFCE",
-              );
-              cell = sheetObject.cell(
-                  CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i + 4));
-              cell.cellStyle = cellStyle;
-              cell.value = "X";
-
-              cell = sheetObject.cell(
-                  CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: i + 4));
-              cell.cellStyle = cellStyle;
-              cell.value = "";
-            } else if (widget.results![i]["state"] == "Ni opravil") {
-              cellStyle = CellStyle(backgroundColorHex: "#FFC7CE");
-
-              cell.cellStyle = cellStyle;
-              cell.value = widget.results![i]["question"];
-
-              cellStyle = CellStyle(
-                bold: true,
-                horizontalAlign: HorizontalAlign.Center,
-                backgroundColorHex: "#FFC7CE",
-              );
-              cell = sheetObject.cell(
-                  CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: i + 4));
-              cell.cellStyle = cellStyle;
-              cell.value = "X";
-
-              cell = sheetObject.cell(
-                  CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i + 4));
-              cell.cellStyle = cellStyle;
-              cell.value = " ";
-            }
-          }
-
-          //Ime Priimek - 2022-31-10 1926
-
-          var fileBytes = excel.save();
-
-          File(
-              ('${dir.path}/$fileName/$fileName - ${now.year}-${now.day}-${now.month} ${now.hour}-${now.minute}.xlsx'))
-            ..createSync(recursive: true)
-            ..writeAsBytesSync(fileBytes!);
-
-          fileLocation =
-              '$fileName/$fileName - ${now.year}-${now.day}-${now.month} ${now.hour}-${now.minute}.xlsx';
-
-          return '${dir.path}/$fileName';
-        } else {
-          return "iOS detected";
+        } else if (Platform.isIOS) {
+          dir = await getApplicationDocumentsDirectory();
         }
+
+        if (dir == null) {
+          throw Exception("Failed to get directory");
+        }
+        createXlsx(dir, fileName);
+        print(dir);
+        print(fileName);
       }
     } catch (e) {
       print(e);
@@ -194,10 +69,148 @@ class _ResultsState extends State<Results> {
     return "false";
   }
 
+  Future<String> createXlsx(Directory dir, String fileName) async {
+    final now = DateTime.now();
+
+    var excel = Excel.createExcel();
+    Sheet sheetObject = excel['Sheet1'];
+    final sheet = excel.sheets[excel.getDefaultSheet() as String];
+    sheet!.setColWidth(0, 70);
+    /* --- STATIC FIELDS --- */
+
+    //IME IN PRIIMEK
+    var cellStatic = sheetObject
+        .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0));
+    CellStyle? cellStyle =
+        CellStyle(bold: true, horizontalAlign: HorizontalAlign.Right);
+    cellStatic.cellStyle = cellStyle;
+    cellStatic.value = "Ime in priimek:";
+    //OCENJEVALEC
+    cellStatic = sheetObject
+        .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 1));
+    cellStatic.cellStyle = cellStyle;
+    cellStatic.value = "Ocenjevalec:";
+    //DATUM
+    cellStatic = sheetObject
+        .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 2));
+    cellStatic.cellStyle = cellStyle;
+    cellStatic.value = "Datum:";
+    // NASLOV
+    cellStatic = sheetObject
+        .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 3));
+    cellStyle = CellStyle(bold: true, horizontalAlign: HorizontalAlign.Center);
+    cellStatic.cellStyle = cellStyle;
+    cellStatic.value = widget.title;
+
+    // JE OPRAVIL
+    cellStatic = sheetObject
+        .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 3));
+    cellStyle = CellStyle(bold: true, horizontalAlign: HorizontalAlign.Center);
+    cellStatic.cellStyle = cellStyle;
+    cellStatic.value = "Je opravil";
+    // NI OPRAVIL
+    cellStatic = sheetObject
+        .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: 3));
+    cellStyle = CellStyle(bold: true, horizontalAlign: HorizontalAlign.Center);
+    cellStatic.cellStyle = cellStyle;
+    cellStatic.value = "Ni opravil";
+
+    /* --- DYNAMIC FIELDS --- */
+
+    //IME IN PRIIMEK
+    cellStatic = sheetObject
+        .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 0));
+    cellStyle = CellStyle(bold: false, horizontalAlign: HorizontalAlign.Left);
+    cellStatic.cellStyle = cellStyle;
+    cellStatic.value = widget.name;
+    //OCENJEVALEC
+    cellStatic = sheetObject
+        .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 1));
+    cellStatic.cellStyle = cellStyle;
+    cellStatic.value = widget.ocenjevalec;
+    //DATUM
+    cellStatic = sheetObject
+        .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 2));
+    cellStatic.cellStyle = cellStyle;
+    cellStatic.value = '${now.day}/${now.month}/${now.year}';
+
+    for (var i = 0; i < widget.results!.length; i++) {
+      CellStyle? cellStyle;
+      var cell = sheetObject
+          .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: i + 4));
+      print(widget.results![i]["state"]);
+
+      if (widget.results![i]["state"] == "Je opravil") {
+        cellStyle = CellStyle(backgroundColorHex: "#C6EFCE");
+        cell.cellStyle = cellStyle;
+        cell.value = widget.results![i]["question"];
+
+        cellStyle = CellStyle(
+          bold: true,
+          horizontalAlign: HorizontalAlign.Center,
+          backgroundColorHex: "#C6EFCE",
+        );
+        cell = sheetObject
+            .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i + 4));
+        cell.cellStyle = cellStyle;
+        cell.value = "X";
+
+        cell = sheetObject
+            .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: i + 4));
+        cell.cellStyle = cellStyle;
+        cell.value = "";
+      } else if (widget.results![i]["state"] == "Ni opravil") {
+        cellStyle = CellStyle(backgroundColorHex: "#FFC7CE");
+
+        cell.cellStyle = cellStyle;
+        cell.value = widget.results![i]["question"];
+
+        cellStyle = CellStyle(
+          bold: true,
+          horizontalAlign: HorizontalAlign.Center,
+          backgroundColorHex: "#FFC7CE",
+        );
+        cell = sheetObject
+            .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: i + 4));
+        cell.cellStyle = cellStyle;
+        cell.value = "X";
+
+        cell = sheetObject
+            .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i + 4));
+        cell.cellStyle = cellStyle;
+        cell.value = " ";
+      }
+    }
+
+    //Ime Priimek - 2022-31-10 1926
+
+    var fileBytes = excel.save();
+
+    File(
+        ('${dir.path}/$fileName/$fileName - ${now.year}-${now.day}-${now.month} ${now.hour}-${now.minute}.xlsx'))
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(fileBytes!);
+
+    fileLocation =
+        '$fileName/$fileName - ${now.year}-${now.day}-${now.month} ${now.hour}-${now.minute}.xlsx';
+
+    return '${dir.path}/$fileName';
+  }
+
   Future<bool> shareFile() async {
     Directory? dir;
     try {
-      if (Platform.isAndroid) {
+      if (Platform.isIOS) {
+        if (await Permission.storage.request().isGranted) {
+          dir = await getApplicationDocumentsDirectory();
+
+          Share.shareXFiles([XFile('${dir!.path}/$fileLocation')]);
+
+          return true;
+        } else {
+          return false;
+        }
+      } else if (Platform.isAndroid) {
         if (await _requestPermission(Permission.storage)) {
           dir = await getExternalStorageDirectory();
 
