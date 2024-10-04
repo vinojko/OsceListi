@@ -76,66 +76,89 @@ class _QuestionsTestState extends State<QuestionsTest> {
                   color: Colors.white,
                   elevation: 10,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(children: [
-                      Expanded(
-                        child: Text(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
                           results[index]['question'],
-                          style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width *
+                                0.04, // Responsive font size
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                            //Kolk je oddaljen radio od enega do drugega
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        SizedBox(
+                            height: 10), // Spacing between question and buttons
+
+                        // Row for 'Je opravil'
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              results[index]['state'] = 'Je opravil';
+                            });
+                          },
+                          child: Row(
                             children: [
-                              Row(children: [
-                                CostumRadioCorrect(
-                                  groupValue: results[index]['state'],
-                                  value: 'Je opravil',
-                                  selectedColor: Colors.teal,
-                                  icon: Icons.check,
-                                  label: 'Je opravil',
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      print(newValue);
-                                      results[index]['state'] = newValue;
-                                    });
-                                  },
-                                ),
-                                SizedBox(width: 10),
-                                CostumRadioCorrect(
-                                  groupValue: results[index]['state'],
-                                  value: 'Ni opravil',
-                                  selectedColor:
-                                      Color.fromARGB(255, 219, 32, 60),
-                                  icon: Icons.close,
-                                  label: 'Ni opravil',
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      print(newValue);
-                                      results[index]['state'] = newValue;
-                                    });
-                                  },
-                                ),
-                              ]),
-                              /*Radio(
-                             groupValue: results[index]['state'],
-                             value: s,
-                             onChanged: (newValue) {
-                               setState(() {
-                                 print(newValue);
-                                 results[index]['state'] = newValue;
-                               });
-                             },
-                           ),*/
-                            ]),
-                      ),
-                    ]),
+                              CostumRadioCorrect(
+                                groupValue: results[index]['state'],
+                                value: 'Je opravil',
+                                selectedColor: Colors.teal,
+                                icon: Icons.check,
+                                label:
+                                    '', // Leave the label empty inside the button
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    results[index]['state'] = newValue;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                  width: 5), // Spacing between icon and text
+                              Text(
+                                'Je opravil',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        SizedBox(height: 8), // Spacing between buttons
+
+                        // Row for 'Ni opravil'
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              results[index]['state'] = 'Ni opravil';
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              CostumRadioCorrect(
+                                groupValue: results[index]['state'],
+                                value: 'Ni opravil',
+                                selectedColor: Color.fromARGB(255, 219, 32, 60),
+                                icon: Icons.close,
+                                label:
+                                    '', // Leave the label empty inside the button
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    results[index]['state'] = newValue;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                  width: 5), // Spacing between icon and text
+                              Text(
+                                'Ni opravil',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

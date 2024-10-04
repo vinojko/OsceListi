@@ -173,25 +173,49 @@ class _HomePageState extends State<HomePage> {
                   "Začni z ocenjevanjem",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 )),
+
+            const SizedBox(height: 30),
             Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset('assets/images/logotipi.png', scale: 2.3),
-                ],
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical, // Ensure vertical scrolling
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 18.0), // adjust the value as needed
+                      child: Image.asset('assets/images/L1.png', scale: 5.3),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 18.0), // adjust the value as needed
+                      child: Image.asset('assets/images/L2.png', scale: 4.3),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 18.0), // adjust the value as needed
+                      child: Image.asset('assets/images/L3.png', scale: 4.3),
+                    ),
+                    Image.asset(
+                      'assets/images/L4.png',
+                      scale: 4.3,
+                    ), // No padding for the last image
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: Text(
+                        'Projekt sofinancirata Republika Slovenija, Ministrstvo za izobraževanje, znanost in šport, in Evropska unija – NextGenerationEU. Projekt se izvaja skladno z načrtom v okviru razvojnega področja Pametna, trajnostna in vključujoča rast, komponente Krepitev kompetenc, zlasti digitalnih in tistih, ki jih zahtevajo novi poklici in zeleni prehod (C3 K5), za ukrep investicija F. Izvajanje pilotnih projektov, katerih rezultati bodo podlaga za pripravo izhodišč za reformo visokega šolstva za zelen in odporen prehod v Družbo 5.0: projekt Pilotni projekti za prenovo visokega šolstva za zelen in odporen prehod.',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 112, 112, 112),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 15.0),
-              child: Text(
-                'Projekt sofinancirata Republika Slovenija, Ministrstvo za izobraževanje, znanost in šport, in Evropska unija – NextGenerationEU. Projekt se izvaja skladno z načrtom v okviru razvojnega področja Pametna, trajnostna in vključujoča rast, komponente Krepitev kompetenc, zlasti digitalnih in tistih, ki jih zahtevajo novi poklici in zeleni prehod (C3 K5), za ukrep investicija F. Izvajanje pilotnih projektov, katerih rezultati bodo podlaga za pripravo izhodišč za reformo visokega šolstva za zelen in odporen prehod v Družbo 5.0: projekt Pilotni projekti za prenovo visokega šolstva za zelen in odporen prehod.',
-                style: TextStyle(
-                    color: Color.fromARGB(255, 112, 112, 112),
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500),
-              ),
-            )
           ]),
         ),
       ),
